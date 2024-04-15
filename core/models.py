@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.utils import timezone
-# Create your models here.
+from django.core.validators import MaxValueValidator, MinValueValidator, EmailValidator
 
 class Colaborador(models.Model):
     rut = models.CharField(max_length=20)
@@ -15,8 +15,21 @@ class Colaborador(models.Model):
 class Cliente(models.Model):
     
     nombre = models.CharField(max_length=100)
-    telefono = models.CharField(max_length=9)
-    email = models.EmailField(unique=True)
+    telefono = models.IntegerField(
+        validators=[
+            MaxValueValidator(999999999, message="Ingrese un número de hasta 9 dígitos sin letras o símbolos."),
+            MinValueValidator(100000000, message="Ingrese un número de hasta 9 dígitos sin letras o símbolos.")
+        ],
+        error_messages={
+            'required': "Este campo es obligatorio.",
+            'invalid': "Ingrese un número válido."
+        }
+    )
+    email = models.CharField(
+        max_length=254, 
+        unique=True,
+        validators=[EmailValidator(message="Ingrese una dirección de correo válida.")]
+    )
 
     def __str__(self):
         return f"{self.nombre} ({self.email})"
