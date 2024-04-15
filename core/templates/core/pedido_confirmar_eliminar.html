@@ -1,0 +1,14 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Confirmar eliminación</h1>
+    <p>¿Estás seguro de que deseas eliminar este pedido de {{ pedido.cliente.nombre }} programado para {{ pedido.fecha }}?</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a href="{% url 'lista_pedidos' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

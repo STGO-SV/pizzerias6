@@ -1,0 +1,45 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<h1>Lista de Pedidos</h1>
+<a href="{% url 'crear_pedido' %}">Agregar Nuevo Pedido</a>
+<table>
+    <thead>
+        <tr>
+            <th>Cliente</th>
+            <th>Dirección</th>
+            <th>Fecha</th>
+            <th>Medio de Pago</th>
+            <th>Hora Pedido</th>
+            <th>Horario de Entrega</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for pedido in pedidos %}
+        <tr>
+            <td>{{ pedido.cliente.nombre }}</td>
+            <td>
+                {% if pedido.direccion %}
+                    {{ pedido.direccion.direccion }}
+                {% else %}
+                    N/A
+                {% endif %}
+            </td>
+            <td>{{ pedido.fecha }}</td>
+            <td>{{ pedido.medio_pago }}</td>
+            <td>{{ pedido.hora_pedido }}</td>
+            <td>{{ pedido.horario_entrega }}</td>
+            <td>
+                <a href="{% url 'actualizar_pedido' pedido.pk %}">Editar</a>
+                <a href="{% url 'eliminar_pedido' pedido.pk %}">Eliminar</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="7">No hay pedidos disponibles.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

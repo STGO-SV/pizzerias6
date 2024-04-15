@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Colaborador, Cliente, DireccionCliente, Producto
-from .forms import ColaboradorForm, ClienteForm, DireccionClienteForm, ProductoForm
+from .models import Colaborador, Cliente, DireccionCliente, Producto, Pedido
+from .forms import ColaboradorForm, ClienteForm, DireccionClienteForm, ProductoForm, PedidoForm
 
 def colaborador_list(request):
     colaboradores = Colaborador.objects.all()
@@ -122,3 +122,34 @@ def eliminar_producto(request, pk):
         return redirect('lista_productos')
     return render(request, 'core/producto_confirmar_eliminar.html', {'producto': producto})
 
+def lista_pedidos(request):
+    pedidos = Pedido.objects.all()
+    return render(request, 'core/pedido_lista.html', {'pedidos': pedidos})
+
+def crear_pedido(request):
+    if request.method == 'POST':
+        form = PedidoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_pedidos')
+    else:
+        form = PedidoForm()
+    return render(request, 'core/pedido_form.html', {'form': form})
+
+def actualizar_pedido(request, pk):
+    pedido = get_object_or_404(Pedido, pk=pk)
+    if request.method == 'POST':
+        form = PedidoForm(request.POST, instance=pedido)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_pedidos')
+    else:
+        form = PedidoForm(instance=pedido)
+    return render(request, 'core/pedido_form.html', {'form': form})
+
+def eliminar_pedido(request, pk):
+    pedido = get_object_or_404(Pedido, pk=pk)
+    if request.method == 'POST':
+        pedido.delete()
+        return redirect('lista_pedidos')
+    return render(request, 'core/pedido_confirmar_eliminar.html', {'pedido': pedido})
