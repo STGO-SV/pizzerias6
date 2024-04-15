@@ -2,11 +2,20 @@
 from django.urls import path
 from .views import home
 from . import views
+
 urlpatterns = [
     path('', home, name="home"),
     path('colaboradores/', views.colaborador_list, name='colaborador_list'),
     path('colaboradores/new', views.colaborador_create, name='colaborador_create'),
     path('colaboradores/<int:pk>/edit/', views.colaborador_update, name='colaborador_update'),
     path('colaboradores/<int:pk>/delete/', views.colaborador_delete, name='colaborador_delete'),
+     path('clientes/', views.lista_clientes, name='lista_clientes'),
+    path('clientes/nuevo/', views.crear_cliente, name='crear_cliente'),
+    path('clientes/<int:pk>/editar/', views.actualizar_cliente, name='actualizar_cliente'),
+    path('clientes/<int:pk>/eliminar/', views.eliminar_cliente, name='eliminar_cliente'),
+    path('direcciones/', views.lista_direcciones, name='lista_direcciones'),
+    path('direcciones/nuevo/', views.crear_direccion, name='crear_direccion'),
+    path('direcciones/<int:pk>/editar/', views.actualizar_direccion, name='actualizar_direccion'),
+    path('direcciones/<int:pk>/eliminar/', views.eliminar_direccion, name='eliminar_direccion'),
 
 ]

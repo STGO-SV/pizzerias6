@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Colaborador
-from .forms import ColaboradorForm
+from .models import Colaborador, Cliente, DireccionCliente
+from .forms import ColaboradorForm, ClienteForm, DireccionClienteForm
 
 def colaborador_list(request):
     colaboradores = Colaborador.objects.all()
@@ -37,3 +37,56 @@ def colaborador_delete(request, pk):
 
 def home (request):
     return render (request, 'core/home.html')
+
+def lista_clientes(request):
+    clientes = Cliente.objects.all()
+    return render(request, 'core/lista_clientes.html', {'clientes': clientes})
+
+def crear_cliente(request):
+    form = ClienteForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return redirect('lista_clientes')
+    return render(request, 'core/form_cliente.html', {'form': form})
+
+def actualizar_cliente(request, pk):
+    cliente = get_object_or_404(Cliente, pk=pk)
+    form = ClienteForm(request.POST or None, instance=cliente)
+    if form.is_valid():
+        form.save()
+        return redirect('lista_clientes')
+    return render(request, 'core/form_cliente.html', {'form': form, 'cliente': cliente})
+
+def eliminar_cliente(request, pk):
+    cliente = get_object_or_404(Cliente, pk=pk)
+    if request.method == 'POST':
+        cliente.delete()
+        return redirect('lista_clientes')
+    return render(request, 'core/confirmar_eliminar.html', {'cliente': cliente})
+
+def lista_direcciones(request):
+    direcciones = DireccionCliente.objects.all()
+    return render(request, 'core/lista_direcciones.html', {'direcciones': direcciones})
+
+def crear_direccion(request):
+    form = DireccionClienteForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return redirect('lista_direcciones')
+    return render(request, 'core/form_direccion.html', {'form': form})
+
+def actualizar_direccion(request, pk):
+    direccion = get_object_or_404(DireccionCliente, pk=pk)
+    form = DireccionClienteForm(request.POST or None, instance=direccion)
+    if form.is_valid():
+        form.save()
+        return redirect('lista_direcciones')
+    return render(request, 'core/form_direccion.html', {'form': form, 'direccion': direccion})
+
+def eliminar_direccion(request, pk):
+    direccion = get_object_or_404(DireccionCliente, pk=pk)
+    if request.method == 'POST':
+        direccion.delete()
+        return redirect('lista_direcciones')
+    return render(request, 'core/confirmar_eliminar_direccion.html', {'direccion': direccion})
+
