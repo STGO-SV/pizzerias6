@@ -12,19 +12,26 @@ class Colaborador(models.Model):
 
 # Crear un manager personalizado para el modelo de Cliente
 class Cliente(models.Model):
-    id = models.AutoField(primary_key=True)
+    
     nombre = models.CharField(max_length=100)
     telefono = models.CharField(max_length=20)
     email = models.EmailField(unique=True)
 
-    def _str_(self):
+    def __str__(self):
         return f"{self.nombre} ({self.email})"
     
 class DireccionCliente(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     direccion = models.CharField(max_length=255)
-    class Meta:
-        db_table = 'CORE_DIRECCIONES_CLIENTE'
-
+    
     def _str_(self):
         return f"{self.cliente.nombre} - {self.direccion}"
+
+class Producto(models.Model):
+    tipo = models.CharField(max_length=50)
+    nombre = models.CharField(max_length=100)
+    precio = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def _str_(self):
+        return f"{self.nombre} ({self.tipo}) - ${self.precio}"
+

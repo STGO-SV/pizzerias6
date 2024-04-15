@@ -1,57 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-{% load static %}
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unreasonable Pizza</title>
-    <link type="text/css" rel="stylesheet" href="{% static 'core/css/estilo.css'%}">
-    <link rel="shortcut icon" href="img/logo_pizza.jpg" />
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
-        .header {
-            width: 100%;
-            padding: 10px 0;
-            text-align: center;
-            border-bottom: 1px solid #ddd;
-        }
-        .nav {
-            width: 200px;
-            float: left;
-            
-            height: 500px;
-            
-        }
-        .content {
-            margin-left: 200px;
-            padding: 20px;
-        }
-    </style>
-</head>
-<body>
-    <div class="header">
-        <img src="{% static 'core/img/logo_pizza.jpg'%}" alt="">
-        
-    </div>
-    <div class="nav">
-        <!-- Navigation items here -->
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'colaborador_list' %}">Listado colaboradores</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'lista_clientes' %}">Listado clientes</a>
-        </li>
+{% extends "core/base.html" %}
 
-        <p>Nav Item 2</p>
-        <!-- More nav items -->
-    </div>
-    <div class="content">
-        <!-- Your content goes here -->
-        <p>This is the main content area.</p>
-    </div>
-</body>
-</html>
+{% block content %}
+<p>This is the main content area.</p>
+    
+{% endblock %}
