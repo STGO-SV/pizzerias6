@@ -41,8 +41,13 @@ class Pedido(models.Model):
     direccion = models.ForeignKey('DireccionCliente', on_delete=models.SET_NULL, null=True, verbose_name='Dirección de entrega')
     fecha = models.DateField(default=timezone.now, verbose_name='Fecha del pedido')
     medio_pago = models.CharField(max_length=100, verbose_name='Medio de pago')
-    hora_pedido = models.TimeField(default=timezone.now, verbose_name='Hora del pedido')
+    hora_pedido = models.TimeField(default=timezone.localtime, verbose_name='Hora del pedido')
     horario_entrega = models.TimeField(verbose_name='Horario de entrega')
 
     def __str__(self):
         return f"{self.cliente.nombre} - {self.fecha}"
+
+class ProductoPedido(models.Model):
+    pedido = models.ForeignKey(Pedido, related_name='producto_pedido', on_delete=models.CASCADE)
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    cantidad = models.IntegerField()

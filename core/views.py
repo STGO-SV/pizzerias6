@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Colaborador, Cliente, DireccionCliente, Producto, Pedido
-from .forms import ColaboradorForm, ClienteForm, DireccionClienteForm, ProductoForm, PedidoForm
+from django.forms import inlineformset_factory
+from django.shortcuts import render, redirect
+from .models import Colaborador, Cliente, DireccionCliente, Producto, Pedido, ProductoPedido
+from .forms import ColaboradorForm, ClienteForm, DireccionClienteForm, ProductoForm, PedidoForm, ProductoPedidoForm, ProductoPedidoFormSet
 
 def colaborador_list(request):
     colaboradores = Colaborador.objects.all()
@@ -126,7 +128,7 @@ def lista_pedidos(request):
     pedidos = Pedido.objects.all()
     return render(request, 'core/pedido_lista.html', {'pedidos': pedidos})
 
-def crear_pedido(request):
+"""def crear_pedido(request):
     if request.method == 'POST':
         form = PedidoForm(request.POST)
         if form.is_valid():
@@ -134,18 +136,25 @@ def crear_pedido(request):
             return redirect('lista_pedidos')
     else:
         form = PedidoForm()
-    return render(request, 'core/pedido_form.html', {'form': form})
+    return render(request, 'core/pedido_form.html', {'form': form})"""
 
 def actualizar_pedido(request, pk):
     pedido = get_object_or_404(Pedido, pk=pk)
     if request.method == 'POST':
         form = PedidoForm(request.POST, instance=pedido)
-        if form.is_valid():
+        formset = ProductoPedidoFormSet(request.POST, instance=pedido)
+        if form.is_valid() and formset.is_valid():
             form.save()
+            formset.save()
             return redirect('lista_pedidos')
     else:
         form = PedidoForm(instance=pedido)
-    return render(request, 'core/pedido_form.html', {'form': form})
+        formset = ProductoPedidoFormSet(instance=pedido)  # Asegúrate de pasar la instancia aquí
+
+    return render(request, 'core/pedido_form.html', {
+        'form': form,
+        'formset': formset
+    })
 
 def eliminar_pedido(request, pk):
     pedido = get_object_or_404(Pedido, pk=pk)
@@ -153,3 +162,24 @@ def eliminar_pedido(request, pk):
         pedido.delete()
         return redirect('lista_pedidos')
     return render(request, 'core/pedido_confirmar_eliminar.html', {'pedido': pedido})
+
+def ver_pedido(request, pk):
+    pedido = get_object_or_404(Pedido, pk=pk)
+    return render(request, 'core/pedido_ver.html', {'pedido': pedido})
+
+def crear_pedido(request):
+    if request.method == 'POST':
+        form = PedidoForm(request.POST)
+        formset = ProductoPedidoFormSet(request.POST)
+        if form.is_valid() and formset.is_valid():
+            pedido = form.save()
+            formset.instance = pedido
+            formset.save()
+            return redirect('lista_pedidos')
+    else:
+        form = PedidoForm()
+        formset = ProductoPedidoFormSet()
+    return render(request, 'core/pedido_form.html', {
+        'form': form,
+        'formset': formset
+    })

@@ -33,6 +33,7 @@
             <td>
                 <a href="{% url 'actualizar_pedido' pedido.pk %}">Editar</a>
                 <a href="{% url 'eliminar_pedido' pedido.pk %}">Eliminar</a>
+                <a href="{% url 'ver_pedido' pedido.pk %}">Ver Detalles</a>
             </td>
         </tr>
         {% empty %}

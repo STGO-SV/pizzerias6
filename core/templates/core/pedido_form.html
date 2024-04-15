@@ -1,10 +1,45 @@
 {% extends "core/base.html" %}
-
+{% load static %}
 {% block content %}
-<h2>{% if not form.instance.pk %}Nuevo{% else %}Editar{% endif %} Pedido</h2>
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Guardar</button>
-</form>
+<div class="container">
+    <h2>Nuevo Pedido</h2>
+    <form method="POST" id="pedidoForm">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {{ formset.management_form }}
+        <table id="productosTable">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for form in formset %}
+                    <tr class="formset_row">
+                        <td>{{ form.producto }}</td>
+                        <td>{{ form.cantidad }}</td>
+                        <td><a href="#" class="delete-row">Eliminar</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="button" id="addRow">Añadir Producto</button>
+        <button type="submit">Guardar Pedido</button>
+    </form>
+</div>
+<script src="{% static 'core/js/jquery-3.7.1.min.js' %}"></script>
+<script src="{% static 'core/js/jquery.formset.js' %}"></script>
+<script>
+    $('#productosTable').formset({
+        addText: 'Añadir Producto',
+        deleteText: 'Eliminar',
+        prefix: 'productopedido_set'
+    });
+    $('#addRow').on('click', function() {
+        $('.add-row').trigger('click');
+        return false;
+    });
+</script>
 {% endblock %}
