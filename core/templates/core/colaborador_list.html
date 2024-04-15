@@ -1,0 +1,14 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+    <h2>Lista de Colaboradores</h2>
+    <a href="{% url 'colaborador_create' %}">Nuevo Colaborador</a>
+    <ul>
+        {% for colaborador in colaboradores %}
+            <li>{{ colaborador.nombres }} - {{ colaborador.cargo }}
+                <a href="{% url 'colaborador_update' colaborador.id %}">Editar</a>
+                <a href="{% url 'colaborador_delete' colaborador.id %}">Borrar</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
