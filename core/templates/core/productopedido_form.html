@@ -1,7 +1,7 @@
 {% extends "core/base.html" %}
 
 {% block content %}
-<h2>{% if not form.instance.pk %}Nuevo{% else %}Editar{% endif %} Pedido</h2>
+<h2>{% if not form.instance.pk %}New{% else %}Edit{% endif %} Product Order</h2>
 <form method="POST">
     {% csrf_token %}
     {{ form.as_p }}

@@ -25,12 +25,12 @@ class ProductoForm(forms.ModelForm):
 class PedidoForm(forms.ModelForm):
     class Meta:
         model = Pedido
-        fields = ['cliente', 'direccion', 'fecha', 'medio_pago', 'hora_pedido', 'horario_entrega']
+        fields = ['cliente', 'direccion', 'fecha', 'medio_pago', 'hora_pedido', 'horario_entrega', 'tipo_entrega']
 
 class ProductoPedidoForm(forms.ModelForm):
     class Meta:
         model = ProductoPedido
-        fields = ['producto', 'cantidad']
+        fields = ['pedido', 'producto', 'cantidad']
 
 ProductoPedidoFormSet = inlineformset_factory(
     Pedido, ProductoPedido,

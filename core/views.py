@@ -167,19 +167,60 @@ def ver_pedido(request, pk):
     pedido = get_object_or_404(Pedido, pk=pk)
     return render(request, 'core/pedido_ver.html', {'pedido': pedido})
 
-def crear_pedido(request):
+"""def crear_pedido(request):
     if request.method == 'POST':
         form = PedidoForm(request.POST)
         formset = ProductoPedidoFormSet(request.POST)
-        if form.is_valid() and formset.is_valid():
+        if form.is_valid():
             pedido = form.save()
-            formset.instance = pedido
-            formset.save()
-            return redirect('lista_pedidos')
+            formset = ProductoPedidoFormSet(request.POST)
+            if formset.is_valid():
+                formset.instance = pedido
+                formset.save()
+                return redirect('lista_pedidos')
     else:
         form = PedidoForm()
         formset = ProductoPedidoFormSet()
     return render(request, 'core/pedido_form.html', {
         'form': form,
         'formset': formset
-    })
+    })"""
+
+def crear_pedido(request):
+    if request.method == 'POST':
+        form = PedidoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_pedidos')
+    else:
+        form = PedidoForm()
+    return render(request, 'core/pedido_form.html', {'form': form})
+
+def create_productopedido(request):
+    if request.method == 'POST':
+        form = ProductoPedidoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('productopedido_list')
+    else:
+        form = ProductoPedidoForm()
+    return render(request, 'core/productopedido_form.html', {'form': form})
+
+def update_productopedido(request, pk):
+    productopedido = ProductoPedido.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = ProductoPedidoForm(request.POST, instance=productopedido)
+        if form.is_valid():
+            form.save()
+            return redirect('productopedido_list')
+    else:
+        form = ProductoPedidoForm(instance=productopedido)
+    return render(request, 'core/productopedido_form.html', {'form': form})
+
+def delete_productopedido(request, pk):
+    ProductoPedido.objects.get(pk=pk).delete()
+    return redirect('productopedido_list')
+
+def list_productopedido(request):
+    productopedidos = ProductoPedido.objects.all()
+    return render(request, 'core/productopedido_list.html', {'productopedidos': productopedidos})

@@ -15,7 +15,7 @@ class Colaborador(models.Model):
 class Cliente(models.Model):
     
     nombre = models.CharField(max_length=100)
-    telefono = models.CharField(max_length=20)
+    telefono = models.CharField(max_length=9)
     email = models.EmailField(unique=True)
 
     def __str__(self):
@@ -31,7 +31,7 @@ class DireccionCliente(models.Model):
 class Producto(models.Model):
     tipo = models.CharField(max_length=50)
     nombre = models.CharField(max_length=100)
-    precio = models.DecimalField(max_digits=10, decimal_places=2)
+    precio = models.DecimalField(max_digits=10, decimal_places=0)
 
     def __str__(self):
         return f"{self.nombre} ({self.tipo}) - ${self.precio}"
@@ -43,11 +43,15 @@ class Pedido(models.Model):
     medio_pago = models.CharField(max_length=100, verbose_name='Medio de pago')
     hora_pedido = models.TimeField(default=timezone.localtime, verbose_name='Hora del pedido')
     horario_entrega = models.TimeField(verbose_name='Horario de entrega')
+    tipo_entrega = models.CharField(max_length=50, verbose_name='Tipo entrega')
 
     def __str__(self):
         return f"{self.cliente.nombre} - {self.fecha}"
 
 class ProductoPedido(models.Model):
-    pedido = models.ForeignKey(Pedido, related_name='producto_pedido', on_delete=models.CASCADE)
-    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    pedido = models.ForeignKey('Pedido', related_name='producto_pedido', on_delete=models.CASCADE)
+    producto = models.ForeignKey('Producto', on_delete=models.CASCADE)
     cantidad = models.IntegerField()
+
+    def __str__(self):
+        return f'{self.pedido} x {self.producto.nombre} x {self.cantidad}'

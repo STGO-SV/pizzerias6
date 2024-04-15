@@ -30,6 +30,7 @@
             <td>{{ pedido.medio_pago }}</td>
             <td>{{ pedido.hora_pedido }}</td>
             <td>{{ pedido.horario_entrega }}</td>
+            <td>{{ pedido.tipo_entrega }}</td>
             <td>
                 <a href="{% url 'actualizar_pedido' pedido.pk %}">Editar</a>
                 <a href="{% url 'eliminar_pedido' pedido.pk %}">Eliminar</a>
