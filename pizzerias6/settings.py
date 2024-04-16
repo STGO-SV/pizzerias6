@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'pizzerias6.wsgi.application'
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }"""
-
+# Conexion mediante cartera de Oracle Cloud
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.oracle',
