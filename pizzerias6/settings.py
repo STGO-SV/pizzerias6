@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
+    'rest_framework',
+    'rest_api'
 ]
 
 MIDDLEWARE = [
@@ -83,12 +85,33 @@ WSGI_APPLICATION = 'pizzerias6.wsgi.application'
 }"""
 # Conexion mediante cartera de Oracle Cloud
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.oracle',
-        'NAME': '(DESCRIPTION=(ADDRESS=(PROTOCOL=TCPS)(HOST=adb.sa-santiago-1.oraclecloud.com)(PORT=1522))(CONNECT_DATA=(SERVICE_NAME=g5a98757b9ac44d_dx0j22habclz0fl9_high.adb.oraclecloud.com))(SECURITY=(MY_WALLET_DIRECTORY=C:/Users/santi/Downloads/Wallet_DX0J22HABCLZ0FL9)(SSL_SERVER_CERT_DN="cn=example.com,ou=oracle,o=cloud,l=santiago,st=santiago,c=cl")))',
-        'USER': 'Admin',
-        'PASSWORD': 'Malenia123456',
-    }
+
+  'default': {
+
+    'ENGINE': 'django.db.backends.oracle',
+
+    'NAME': 'xe', # Solo el nombre de la base de datos
+
+    'USER': 'C##practica',
+
+    'PASSWORD': 'practica123',
+
+    'HOST': 'localhost',
+
+    'PORT': '1521',
+
+    'TEST': {
+
+      'USER': 'default_test',
+
+      'TBLSPACE': 'default_test_tbls',
+
+      'TBLSPACE_TMP': 'default_test_tbls_tmp', 
+
+    },
+
+  },
+
 }
 
 
