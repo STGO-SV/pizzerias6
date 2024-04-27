@@ -38,7 +38,9 @@ def colaborador_delete(request, pk):
 # Create your views here.
 
 def home (request):
-    return render (request, 'core/home.html')
+    return render (request, 'core/home.html', {
+        'title': 'Inicio'
+    })
 
 def lista_clientes(request):
     clientes = Cliente.objects.all()
