@@ -43,6 +43,7 @@ body {
 }
 
 .nav a {
+    display: block;
     color: #fff;
     margin: 0 15px;
     text-decoration: none;
@@ -96,6 +97,20 @@ body {
     max-width: 1140px; /* Max width for content alignment */
     margin: auto;
     overflow: hidden;
+}
+
+.message,
+.alert-success,
+.alert {
+    padding: 20px;
+    background: #1f7e58;
+    color: white;
+    text-align: center;
+    margin-bottom: 10px;;
+}
+
+.alert-warning {
+    background: #dc2f35;
 }
 
 /* Responsive design breakpoints */

@@ -39,24 +39,41 @@
     </div>
     <div class="nav">
         <!-- Navigation items here -->
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'colaborador_list' %}">Listado colaboradores</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'lista_clientes' %}">Listado clientes</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'lista_direcciones' %}">Listado direcciones</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'lista_productos' %}">Listado productos</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'lista_pedidos' %}">Listado pedidos</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'productopedido_list' %}">Listado productos para pedido</a>
-        </li>
+        <ul>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'home' %}">Inicio</a>
+
+            {% if user.email %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'colaborador_list' %}">Listado colaboradores</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'lista_clientes' %}">Listado clientes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'lista_direcciones' %}">Listado direcciones</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'lista_productos' %}">Listado productos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'lista_pedidos' %}">Listado pedidos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'productopedido_list' %}">Listado productos para pedido</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">Cerrar Sesión</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'registro' %}">Registrarse</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                </li>
+            {% endif %}
+        </ul>
     </div>
     <div class="content">
         <!-- The block tag defines a block that child templates can insert content into -->

@@ -1,0 +1,17 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+    <h1>{{title}}</h1>
+
+    {{register_form.errors}}
+
+    <form method="post" action="">
+        {% csrf_token %}
+        {% for field in register_form %}
+        <label>{{field.label}}</label>
+        {{field}}
+        {% endfor %}
+
+        <button type="submit">Registrarse</button>
+    
+{% endblock %}

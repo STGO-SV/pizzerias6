@@ -30,4 +30,7 @@ urlpatterns = [
     path('productopedido/new', views.create_productopedido, name='productopedido_new'),
     path('productopedido/edit/<int:pk>/', views.update_productopedido, name='productopedido_edit'),
     path('productopedido/delete/<int:pk>/', views.delete_productopedido, name='productopedido_delete'),
+    path('registro/', views.register_page, name='registro'),
+    path('login/', views.login_page, name='login'),
+    path('logout/', views.logout_user, name='logout'),
 ]

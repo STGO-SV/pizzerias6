@@ -1,6 +1,23 @@
 {% extends "core/base.html" %}
 
 {% block content %}
-<p>This is the main content area.</p>
+    <p>This is the main content area.</p>
+    <hr/>
+    {% if message in messages %}
+        {% for message in messages %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    {% if user.email %}
+    <h2>Bienvenido, {{request.user.first_name}} {{user.last_name}}</h2>
+    <p>
+        {{user.email}}
+    </p>
+    {% else %}
+        <h2>Identificate para ver más información</h2>
+    {% endif %}
     
 {% endblock %}
