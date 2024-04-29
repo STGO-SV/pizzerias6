@@ -4,12 +4,27 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
 from core.models import Colaborador
 from .serializers import ColaboradorSerializer
+from core.models import Cliente
+from .serializers import ClienteSerializer
+from core.models import DireccionCliente
+from .serializers import DireccionClienteSerializer
+from core.models import Producto
+from .serializers import ProductoSerializer
+from core.models import Pedido
+from .serializers import PedidoSerializer
+from core.models import ProductoPedido
+from .serializers import ProductoPedidoSerializer
+
 
 # Create your views here.
 @csrf_exempt
 @api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
 def colaborador_list(request):
     if request.method == 'GET':
         colaboradores = Colaborador.objects.all()
