@@ -3,6 +3,11 @@
 import os
 import sys
 
+INSTALLED_APPS = [
+    
+    'rest_framework',
+    'rest_framework.authtoken',
+]
 
 def main():
     """Run administrative tasks."""
