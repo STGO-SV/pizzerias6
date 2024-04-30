@@ -4,7 +4,7 @@ from core.models import Colaborador, Cliente, DireccionCliente, Producto, Pedido
 class ColaboradorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Colaborador
-        fields = ['rut', 'nombres', 'cargo']
+        fields = ['id','rut', 'nombres', 'cargo']
 
 class ClienteSerializer(serializers.ModelSerializer):
     class Meta:
@@ -19,7 +19,7 @@ class DireccionClienteSerializer(serializers.ModelSerializer):
 class ProductoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Producto
-        fields = ['tipo', 'nombre', 'precio']
+        fields = ['id', 'tipo', 'nombre', 'precio']
 
 class PedidoSerializer(serializers.ModelSerializer):
     class Meta:
