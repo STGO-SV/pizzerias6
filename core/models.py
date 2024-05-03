@@ -6,6 +6,8 @@ from django.conf import settings
 from math import radians, cos, sin, asin, sqrt
 from django.core.exceptions import ValidationError
 import requests
+from django.contrib.auth.models import Group
+from django.contrib.auth.models import User
 
 '''<!DOCTYPE html>
 <html>
@@ -64,6 +66,7 @@ def get_coords(address):
         raise ValidationError("No se puede validar la dirección.")
 
 class Colaborador(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='colaborador')
     CARGO_CHOICES = [
         ('Driver', 'Driver'),
         ('Operario', 'Operario'),
@@ -74,8 +77,25 @@ class Colaborador(models.Model):
     nombres = models.CharField(max_length=100)
     cargo = models.CharField(max_length=50, choices=CARGO_CHOICES)
 
+    class Meta:
+        permissions = [
+            ('agregar_pedido', 'Puede agregar pedido'),
+            ('ver_detalles', 'Puede ver detalles'),
+            ('editar_pedido', 'Puede editar pedido'),
+            ('eliminar_pedido', 'Puede eliminar pedido'),
+        ]
+
     def __str__(self):
         return f"{self.nombres} - {self.cargo}"
+    
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)  # En etapa de prueba
+        group = Group.objects.get(name='Colaboradores')
+        if self.cargo in ['Operario', 'Driver']:
+            group.user_set.add(self.usuario)  # En etapa de prueba
+        else:
+            group.user_set.remove(self.usuario)
+        group.save()
 
 # Crear un manager personalizado para el modelo de Cliente
 class Cliente(models.Model):

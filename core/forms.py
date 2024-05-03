@@ -6,6 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib import admin
+from .models import Colaborador
 
 class RegisterForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
@@ -33,9 +34,34 @@ admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 
 class ColaboradorForm(forms.ModelForm):
+    username = forms.CharField(max_length=150)
+    email = forms.EmailField()
+    password = forms.CharField(widget=forms.PasswordInput())
+    confirm_password = forms.CharField(widget=forms.PasswordInput(), label="Confirm password")
+
     class Meta:
         model = Colaborador
-        fields = ['rut', 'nombres', 'cargo']
+        fields = ['rut', 'nombres', 'cargo', 'username', 'email', 'password', 'confirm_password']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get("password")
+        confirm_password = cleaned_data.get("confirm_password")
+
+        if password and confirm_password and password != confirm_password:
+            self.add_error('confirm_password', "Password and confirm password does not match")
+
+    def save(self, commit=True):
+        user = User.objects.create_user(
+            username=self.cleaned_data['username'],
+            email=self.cleaned_data['email'],
+            password=self.cleaned_data['password']
+        )
+        colaborador = super(ColaboradorForm, self).save(commit=False)
+        colaborador.user = user
+        if commit:
+            colaborador.save()
+        return colaborador
 
 class ClienteForm(forms.ModelForm):
     class Meta:
