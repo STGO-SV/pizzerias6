@@ -47,32 +47,32 @@ def haversine(lon1, lat1, lon2, lat2):
 
 
 def get_coords(address):
-    API_KEY = 'AIzaSyAEqGFaWx6amFhu-UJKZjfJn1UC2OMbDig'  # Replace this with your actual API key
+    API_KEY = 'AIzaSyAEqGFaWx6amFhu-UJKZjfJn1UC2OMbDig'
     base_url = "https://maps.googleapis.com/maps/api/geocode/json"
     params = {'address': address, 'key': API_KEY}
     response = requests.get(base_url, params=params)
     response_data = response.json()
-    
     if response_data['status'] == 'OK':
-        latitude = response_data['results'][0]['geometry']['location']['lat']
-        longitude = response_data['results'][0]['geometry']['location']['lng']
-        print(latitude, longitude)
-        return (latitude, longitude)
+        for result in response_data['results']:
+            if "street_address" in result['types'] or "premise" in result['types']:
+                latitude = result['geometry']['location']['lat']
+                longitude = result['geometry']['location']['lng']
+                print(latitude, longitude)
+                return (latitude, longitude)
+            raise ValidationError("La dirección no es clara.")
     else:
-        return None
-
-# Example usage:
-#coords = get_coords("1600 Amphitheatre Parkway, Mountain View, CA")
-#print(coords)
-
-
-
-    
+        raise ValidationError("No se puede validar la dirección.")
 
 class Colaborador(models.Model):
+    CARGO_CHOICES = [
+        ('Driver', 'Driver'),
+        ('Operario', 'Operario'),
+        ('Jefe de turno', 'Jefe de turno'),
+        ('Gerente', 'Gerente'),
+    ]
     rut = models.CharField(max_length=20)
     nombres = models.CharField(max_length=100)
-    cargo = models.CharField(max_length=50)
+    cargo = models.CharField(max_length=50, choices=CARGO_CHOICES)
 
     def __str__(self):
         return f"{self.nombres} - {self.cargo}"
@@ -116,13 +116,24 @@ class Producto(models.Model):
         return f"{self.nombre} ({self.tipo}) - ${self.precio}"
 
 class Pedido(models.Model):
+    TIPO_ENTREGA_CHOICES = (
+        ('delivery', 'Delivery'),
+        ('retiro', 'Retiro en tienda'),
+        ('consumo', 'Consumo en local'),
+    )
+    MEDIO_PAGO_CHOICES = (
+        ('efectivo', 'Efectivo'),
+        ('tarjeta', 'Tarjeta'),
+        ('mercadopago', 'Mercadopago'),
+        ('sodexo', 'Sodexo'),
+    )
     cliente = models.ForeignKey('Cliente', on_delete=models.CASCADE, verbose_name='Cliente')
     direccion = models.ForeignKey('DireccionCliente', on_delete=models.SET_NULL, null=True, verbose_name='Dirección de entrega')
     fecha = models.DateField(default=timezone.now, verbose_name='Fecha del pedido')
-    medio_pago = models.CharField(max_length=100, verbose_name='Medio de pago')
+    medio_pago = models.CharField(max_length=100, choices=MEDIO_PAGO_CHOICES, verbose_name='Medio de pago')
     hora_pedido = models.TimeField(default=timezone.localtime, verbose_name='Hora del pedido')
     horario_entrega = models.TimeField(verbose_name='Horario de entrega')
-    tipo_entrega = models.CharField(max_length=50, verbose_name='Tipo entrega')
+    tipo_entrega = models.CharField(max_length=50, choices=TIPO_ENTREGA_CHOICES, verbose_name='Tipo entrega')
 
     def clean(self):
         super().clean()  # Ensure validation for other fields is also executed
@@ -133,7 +144,7 @@ class Pedido(models.Model):
                 main_lon = -71.5504379272461
                 distance = haversine(main_lon, main_lat, delivery_coords[1], delivery_coords[0])
                 if distance > 5:
-                    # Raise validation error if delivery is not possible
+                    # Presentar error si distancia es mayor
                     raise ValidationError("No puede hacerse delivery, dirección lejana. Por favor cambie el tipo de entrega.")
             else:
                 raise ValidationError("No se pudo determinar las coordenadas de la dirección de entrega.")
