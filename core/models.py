@@ -66,7 +66,7 @@ def get_coords(address):
         raise ValidationError("No se puede validar la dirección.")
 
 class Colaborador(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='colaborador')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='colaborador', null=True)
     CARGO_CHOICES = [
         ('Driver', 'Driver'),
         ('Operario', 'Operario'),
@@ -89,12 +89,16 @@ class Colaborador(models.Model):
         return f"{self.nombres} - {self.cargo}"
     
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)  # En etapa de prueba
+        if not self.user_id:
+            # Crea usuario por defecto en Colaboradores si no se ha especificado uno
+            default_user = User.objects.create_user(username=self.nombres, password='defaultpassword')
+            self.user = default_user
+        super().save(*args, **kwargs)
         group = Group.objects.get(name='Colaboradores')
         if self.cargo in ['Operario', 'Driver']:
-            group.user_set.add(self.usuario)  # En etapa de prueba
+            group.user_set.add(self.user)
         else:
-            group.user_set.remove(self.usuario)
+            group.user_set.remove(self.user)
         group.save()
 
 # Crear un manager personalizado para el modelo de Cliente
@@ -169,8 +173,8 @@ class Pedido(models.Model):
             else:
                 raise ValidationError("No se pudo determinar las coordenadas de la dirección de entrega.")
 
-    def _str_(self):
-        return f"{self.cliente.nombre} - {self.fecha}"
+    def __str__(self):
+        return f"{self.id} - {self.cliente.nombre} - {self.fecha}"
 
 class ProductoPedido(models.Model):
     pedido = models.ForeignKey('Pedido', related_name='producto_pedido', on_delete=models.CASCADE)
@@ -178,4 +182,4 @@ class ProductoPedido(models.Model):
     cantidad = models.IntegerField()
 
     def __str__(self):
-        return f'{self.pedido} x {self.producto.nombre} x {self.cantidad}'
+        return f'{self.pedido.id} x {self.producto.nombre} x {self.cantidad}'

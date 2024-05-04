@@ -49,7 +49,7 @@ class ColaboradorForm(forms.ModelForm):
         confirm_password = cleaned_data.get("confirm_password")
 
         if password and confirm_password and password != confirm_password:
-            self.add_error('confirm_password', "Password and confirm password does not match")
+            self.add_error('confirm_password', "Contraseña y confirmar contraseña no coinciden")
 
     def save(self, commit=True):
         user = User.objects.create_user(

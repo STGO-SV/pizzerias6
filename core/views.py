@@ -172,7 +172,7 @@ def actualizar_pedido(request, pk):
             return redirect('lista_pedidos')
     else:
         form = PedidoForm(instance=pedido)
-        formset = ProductoPedidoFormSet(instance=pedido)  # Asegúrate de pasar la instancia aquí
+        formset = ProductoPedidoFormSet(instance=pedido)  
 
     return render(request, 'core/pedido_form.html', {
         'form': form,
